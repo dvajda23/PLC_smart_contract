@@ -1,25 +1,26 @@
 //SPDX-License-Identifier: M
 pragma solidity ^0.8.x;
-contract Sortiranje {
+contract Sorting {
      
-   uint[] stanje;
-   uint[] racunanje;
-   uint[] premikanje;
-   uint[] staro_stanje;
-   uint stack1;
+   uint[] state;
+   uint[] calculating;
+   uint[] moving;
+   uint[] old_state;
+   uint movement;
+   uint calculation;
+   uint global;
+   uint smallest;
+   uint new_state;
+   uint largest1;
+   uint second_smallest;
+   uint third_smallest;
+   uint fourth_smallest;
+  /* 
+   uint stack1;          // In the future this section will be developed. It could be use to calculate sum of parcels in each column. Since this is still in development stage, we will hard-code number of parcels in each column.
    uint stack2;
    uint stack3;
    uint stack4;
-   uint premiki;
-   uint racun;
-   uint globalno;
-   uint najmanjse;
-   uint novo_stanje;
-   uint najvecji1;
-   uint drugi_najmanjsi;
-   uint tretji_najmanjsi;
-   uint cetrti_najmanjsi;
-   bool senzor_1;
+   bool senzor_1;                                          
    bool senzor_2;
    bool senzor_3;
    bool senzor_4;
@@ -36,9 +37,9 @@ contract Sortiranje {
    bool senzor_15;
    bool senzor_16;
 
-   /*
+   
    // bool to uint
-    uint stack1_1 = senzor_1 ? uint(1) : uint(0);
+    uint stack1_1 = senzor_1 ? uint(1) : uint(0);            // An example of calculation.
     uint stack1_2 = senzor_2 ? uint(1) : uint(0);
     uint stack1_3 = senzor_3 ? uint(1) : uint(0);
     uint stack1_4 = senzor_4 ? uint(1) : uint(0);
@@ -66,37 +67,37 @@ contract Sortiranje {
     
     stack4 = stack4_1 + stack4_2 + stack4_3 + stack4_4;
 
-    stanje[] = {stack1, stack2, stack3, stack4};
+    state[] = {stack1, stack2, stack3, stack4}; // Final smart storage state is an array of columns.
 
     */
 
 
    
 
-   function A_Shranjevanje(uint[] memory _stanje1) public  returns(uint[] memory) {
-       stanje = _stanje1;
-       staro_stanje = _stanje1;
-       return stanje;
+   function A_Storing(uint[] memory _state1) public  returns(uint[] memory) {  // Hard coding values as mentioned above. In future this function won't have any user input.
+       state = _state1;
+       old_state = _state1;
+       return state;
    }
-   function B_Primerjava(uint[] memory _stanje) public  returns(uint){
+   function B_Comparison(uint[] memory _state) public  returns(uint){   // Function that iterates through the data and stores the smallest value into variable called "smallest".  
   
-    uint index = 0;
-    uint min = _stanje[0];
+    uint index = 0;                                                     // The function also determines / sorts out other values in array by their size (smallest -> largest).
+    uint min = _state[0];
     uint temp;
     for (uint _i = 1; _i <= 3; _i++){
-        if (_stanje[_i] < min){
-        min = _stanje[_i];
+        if (_state[_i] < min){
+        min = _state[_i];
         index = _i;
 
 	for(uint i = 1; i <= 3; i++ ){
          for(uint j = i+1; j<=3; j++){
-            if(_stanje[i]>_stanje[j]){
-               temp = _stanje[i];
-               _stanje[i] = _stanje[j];
-               _stanje[j] = temp;
-               drugi_najmanjsi = stanje[1];
-               tretji_najmanjsi = stanje[2];
-               cetrti_najmanjsi = stanje[3];
+            if(_state[i]>_state[j]){
+               temp = _state[i];
+               _state[i] = _state[j];
+               _state[j] = temp;
+               second_smallest = state[1];
+               third_smallest = state[2];
+               fourth_smallest = state[3];
             }
          }
       }
@@ -104,79 +105,78 @@ contract Sortiranje {
         
         }
     }
-    najmanjse = index;
+    smallest = index;
     return index; }
-    //sedaj poznamo index na katerem se nahaja najmanjše število paketov. če privzamemo da vnašamo št. paketov od leve proti desni, potem vemo na kateri x poziciji je najmanj paketov.
-    //imamo optimalno pozicijo za paket!
+    // Now we know the index of the column that has the least parcels, assuming that columns go from left to right. We have the optimal columns to unload other parcels,
+    // in order to reach the desired parcel.
 
-    function C_Izbira(uint[] memory koordinate) public returns(uint, uint) { //prva koordinata je x, druga pa y, x je vedno [0,1,2,3], lahko vnesemo samo y
-      uint najvecji;
-      racunanje = koordinate;
+    function C_Choice(uint[] memory coordinates) public returns(uint, uint) { // Assuming that columns go from left to right, the only important parameter is the number of parcels in each column.
+      uint largest;
+      calculating = coordinates;                                    // In this function, user chooses the desired parcel.
       
       uint maxindex = 0; 
       for(uint m = 1; m <= 3; m++){
-            if(koordinate[m] > najvecji) {
-                najvecji = koordinate[m]; 
+            if(coordinates[m] > largest) {
+                largest = coordinates[m]; 
        
    } }
          
         
        for (uint n = 1; n <= 3; n++) { 
-            if (koordinate[n] > koordinate[maxindex]) {     
+            if (coordinates[n] > coordinates[maxindex]) {     
                  maxindex = n;  
-                 globalno = maxindex;
+                 global = maxindex;
     } 
 }  
-            najvecji1 = koordinate[maxindex];
+            largest1 = coordinates[maxindex];
                      
-        return (najvecji1, maxindex);
+        return (largest1, maxindex);
 
 
     }
    
- // izberemo kateri paket želimo premakniti. Pri tem so x koordinate [0,1,2,3]. Y koordinate so torej [0,x,0,0], pri čemer je x na tistem mestu, ki ustreza zapisu.
- //torej npr. je lokacija paketa [1,x]. Sedaj moramo odšteti indeksa od shranjevanja in indeksa od izbire, da dobimo koliko premikov paketov potrebujemo, da pridemo do želenega paketa.
+ // Desired parcel syntax [0,x,0,0], with x being height (y position) of a parcel in column.
+ 
    
-    function D_Izracun() public returns(uint[] memory)  {
-        if (najvecji1 == 4){
-            stanje[globalno] = 4;
+    function D_Calculation() public returns(uint[] memory)  {   // Array calculations.
+        if (largest1 == 4){
+            state[global] = 4;
         }
-        if (najvecji1 == 3){
-            stanje[globalno] = 3;
+        if (largest1 == 3){
+            state[global] = 3;
         }
-        if (najvecji1 == 2){
-            stanje[globalno] = 2;
+        if (largest1 == 2){
+            state[global] = 2;
 
         }
-        if (najvecji1 == 1){
-            stanje[globalno] = 1;
+        if (largest1 == 1){
+            state[global] = 1;
 
         }
-         return stanje;
+         return state;
     }
     
-    function E_Premik() public returns(uint, uint[] memory){ //vrne optimalno stanje skladišča po premikih!
-       // stanje = novo_stanje_array;
-        novo_stanje = staro_stanje[najmanjse] + (staro_stanje[globalno] - stanje[globalno]); // v tej vrstici je problem
-        stanje[najmanjse] = novo_stanje;
-        return (novo_stanje, stanje); // Glede na to, da gre v višino največ 4 paketi, potem je situacija problematična le, ko je paket v legah 1-3.
-        //y je označen po legah od 1 do 4.
+    function E_Moving_parcel() public returns(uint, uint[] memory){  // This function calculates optimal number of parcels in each column and displays the new state of storage.
+       
+        new_state = old_state[smallest] + (old_state[global] - state[global]); 
+        return (new_state, state); 
+        
 
     }
     
-    function F_Odlocanje() public {
-        if (stanje[drugi_najmanjsi] > 4) {
-            stanje[tretji_najmanjsi] = stanje[tretji_najmanjsi] + (stanje[drugi_najmanjsi] - 4);
-            stanje[drugi_najmanjsi] = 4;
+    function F_Deciding() public {                                    // Decision based mechanism, which uses the fact that maximum height of each column is 4. If the maximum height is reached, then parcels are being moved to second_smallest column and so on.
+        if (state[second_smallest] > 4) {
+            state[third_smallest] = state[third_smallest] + (state[second_smallest] - 4);
+            state[second_smallest] = 4;
         }
 
-        if (stanje[tretji_najmanjsi] > 4) {
-            stanje[cetrti_najmanjsi] = stanje[cetrti_najmanjsi] + (stanje[tretji_najmanjsi] - 4);
-            stanje[cetrti_najmanjsi] = 4;
+        if (state[third_smallest] > 4) {
+            state[fourth_smallest] = state[fourth_smallest] + (state[fourth_smallest] - 4);
+            state[fourth_smallest] = 4;
         }
-        if (stanje[cetrti_najmanjsi] > 4) {
-           // function Preobremenitev() public returns(string) {
-               // return "Preobremenitev skladišča.";
+        if (state[fourth_smallest] > 4) {
+           // function Overload() public returns(string) {
+               // return "Error: OVERLOAD";
             }
         }
 
