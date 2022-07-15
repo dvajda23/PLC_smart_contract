@@ -11,7 +11,8 @@ This results in high complexity of our programs, which is not user friendly, sin
 Advanced calculationg algorithm is programmed in a smart contract. Smart contract is deployed on Rinkeby testnet using Raspberry Pi. PLC communicates with RPi using MODBUS TCP connection protocol. Use of this expansion will be demonstrated on a practical example of a smart warehouse unit. Solving this problem would be very complex in ladder logic, but using a smart contract it's fairly simple. 
 
 Smart storage unit consists of 4 column. Each column's maximum height is 4 parcels. Height of each column is calculated using sensor outputs.
-![senzorji_skladisce](https://user-images.githubusercontent.com/109219325/179218252-c12727f7-a58d-46c1-b53d-b9a0bba022cb.png)
 
-State of each sensor is sent to RPi, and then an algorithm calculates
+  ![senzorji_skladisce](https://user-images.githubusercontent.com/109219325/179218252-c12727f7-a58d-46c1-b53d-b9a0bba022cb.png)
+
+State of each sensor is sent to RPi using MODBUS. User defines which parcel they would like to access. and then an algorithm calculates
 
