@@ -1,4 +1,3 @@
-# PLC_smart_contract
 # Expanding Abilities of PLC by Use of External Software
 
 ## Introduction
