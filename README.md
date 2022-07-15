@@ -16,3 +16,5 @@ Smart storage unit consists of 4 column. Each column's maximum height is 4 parce
 
 State of each sensor is sent to RPi using MODBUS. Using function inputs defined in the smart contract user defines which parcel they would like to access. Then an algorithm calculates the optimal way to distribute other parcels in order to gain access to the chosen one.
 
+This thesis is a direct results of my own experiments and testing under supervision and mentorship of Prof. Dr. Janez Diaci and Asist. Dr. Marko Corn.
+
