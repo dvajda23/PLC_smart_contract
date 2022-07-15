@@ -1,5 +1,6 @@
-# Expanding Abilities of PLC by Use of External Software (David Vajda's final thesis, University of Ljubljana, Faculty of Mechanical Engineering)
+# Expanding Abilities of PLC by Use of External Software 
 
+### About: David Vajda's final thesis, University of Ljubljana, Faculty of Mechanical Engineering
 ## Introduction
 Programmable logic controllers are pretty limited in terms of their calculating abilities. If we would like to use advanced calculating / decision in our PLC program 
 we would need to make a very advanced algorithm in LADDER logic.
